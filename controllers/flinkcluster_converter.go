@@ -55,6 +55,7 @@ var flinkSysProps = map[string]struct{}{
 	"blob.server.port":       {},
 	"query.server.port":      {},
 	"rest.port":              {},
+	"high-availability.jobmanager.port":              {},
 }
 
 // Gets the desired state of a cluster.
@@ -93,7 +94,8 @@ func getDesiredJobManagerDeployment(
 	var blobPort = corev1.ContainerPort{Name: "blob", ContainerPort: *jobManagerSpec.Ports.Blob}
 	var queryPort = corev1.ContainerPort{Name: "query", ContainerPort: *jobManagerSpec.Ports.Query}
 	var uiPort = corev1.ContainerPort{Name: "ui", ContainerPort: *jobManagerSpec.Ports.UI}
-	var ports = []corev1.ContainerPort{rpcPort, blobPort, queryPort, uiPort}
+	var haPort = corev1.ContainerPort{Name: "ha", ContainerPort: *jobManagerSpec.Ports.HA}
+	var ports = []corev1.ContainerPort{rpcPort, blobPort, queryPort, uiPort, haPort}
 	for _, port := range jobManagerSpec.ExtraPorts {
 		ports = append(ports, corev1.ContainerPort{Name: port.Name, ContainerPort: port.ContainerPort, Protocol: corev1.Protocol(port.Protocol)})
 	}
@@ -255,6 +257,10 @@ func getDesiredJobManagerService(
 		Name:       "ui",
 		Port:       *jobManagerSpec.Ports.UI,
 		TargetPort: intstr.FromString("ui")}
+	var haPort = corev1.ServicePort{
+		Name:       "ha",
+		Port:       *jobManagerSpec.Ports.HA,
+		TargetPort: intstr.FromString("ha")}
 	var jobManagerServiceName = getJobManagerServiceName(clusterName)
 	var podLabels = getComponentLabels(*flinkCluster, "jobmanager")
 	podLabels = mergeLabels(podLabels, jobManagerSpec.PodLabels)
@@ -269,7 +275,7 @@ func getDesiredJobManagerService(
 		},
 		Spec: corev1.ServiceSpec{
 			Selector: podLabels,
-			Ports:    []corev1.ServicePort{rpcPort, blobPort, queryPort, uiPort},
+			Ports:    []corev1.ServicePort{rpcPort, blobPort, queryPort, uiPort, haPort},
 		},
 	}
 	// This implementation is specific to GKE, see details at
@@ -550,6 +556,7 @@ func getDesiredConfigMap(
 		"blob.server.port":       strconv.FormatInt(int64(*jmPorts.Blob), 10),
 		"query.server.port":      strconv.FormatInt(int64(*jmPorts.Query), 10),
 		"rest.port":              strconv.FormatInt(int64(*jmPorts.UI), 10),
+		"high-availability.jobmanager.port":              strconv.FormatInt(int64(*jmPorts.HA), 10),
 		"taskmanager.rpc.port":   strconv.FormatInt(int64(*tmPorts.RPC), 10),
 	}
 	if flinkHeapSize["jobmanager.heap.size"] != "" {

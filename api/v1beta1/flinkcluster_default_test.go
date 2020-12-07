@@ -45,6 +45,7 @@ func TestSetDefault(t *testing.T) {
 	var defaultJmBlobPort = int32(6124)
 	var defaultJmQueryPort = int32(6125)
 	var defaultJmUIPort = int32(8081)
+	var defaultJmHAPort = int32(6126)
 	var defaultTmDataPort = int32(6121)
 	var defaultTmRPCPort = int32(6122)
 	var defaultTmQueryPort = int32(6125)
@@ -75,6 +76,7 @@ func TestSetDefault(t *testing.T) {
 					Blob:  &defaultJmBlobPort,
 					Query: &defaultJmQueryPort,
 					UI:    &defaultJmUIPort,
+					HA:    &defaultJmHAPort,
 				},
 				Resources:          corev1.ResourceRequirements{},
 				MemoryOffHeapRatio: &defaultMemoryOffHeapRatio,
@@ -131,6 +133,7 @@ func TestSetNonDefault(t *testing.T) {
 	var jmBlobPort = int32(8124)
 	var jmQueryPort = int32(8125)
 	var jmUIPort = int32(9081)
+	var jmHAPort = int32(8126)
 	var tmDataPort = int32(8121)
 	var tmRPCPort = int32(8122)
 	var tmQueryPort = int32(8125)
@@ -166,6 +169,7 @@ func TestSetNonDefault(t *testing.T) {
 					Blob:  &jmBlobPort,
 					Query: &jmQueryPort,
 					UI:    &jmUIPort,
+					HA:    &jmHAPort,
 				},
 				Resources:          corev1.ResourceRequirements{},
 				MemoryOffHeapRatio: &memoryOffHeapRatio,
@@ -230,6 +234,7 @@ func TestSetNonDefault(t *testing.T) {
 					Blob:  &jmBlobPort,
 					Query: &jmQueryPort,
 					UI:    &jmUIPort,
+					HA:    &jmHAPort,
 				},
 				Resources:          corev1.ResourceRequirements{},
 				MemoryOffHeapRatio: &memoryOffHeapRatio,
