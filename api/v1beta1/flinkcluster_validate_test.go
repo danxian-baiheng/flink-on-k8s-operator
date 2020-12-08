@@ -35,6 +35,7 @@ func TestValidateCreate(t *testing.T) {
 	var queryPort int32 = 8003
 	var uiPort int32 = 8004
 	var dataPort int32 = 8005
+	var haPort int32 = 8006
 	var parallelism int32 = 2
 	var restartPolicy = JobRestartPolicyFromSavepointOnFailure
 	var memoryOffHeapRatio int32 = 25
@@ -57,6 +58,7 @@ func TestValidateCreate(t *testing.T) {
 					Blob:  &blobPort,
 					Query: &queryPort,
 					UI:    &uiPort,
+					HA:    &haPort,
 				},
 				MemoryOffHeapRatio: &memoryOffHeapRatio,
 				MemoryOffHeapMin:   memoryOffHeapMin,
@@ -136,6 +138,7 @@ func TestInvalidJobManagerSpec(t *testing.T) {
 	var blobPort int32 = 8002
 	var queryPort int32 = 8003
 	var uiPort int32 = 8004
+	var haPort int32 = 8006
 
 	var cluster = FlinkCluster{
 		ObjectMeta: metav1.ObjectMeta{
@@ -155,6 +158,7 @@ func TestInvalidJobManagerSpec(t *testing.T) {
 					Blob:  &blobPort,
 					Query: &queryPort,
 					UI:    &uiPort,
+					HA:    &haPort,
 				},
 			},
 		},
@@ -181,6 +185,7 @@ func TestInvalidJobManagerSpec(t *testing.T) {
 					Blob:  &blobPort,
 					Query: &queryPort,
 					UI:    &uiPort,
+					HA:    &haPort,
 				},
 			},
 		},
@@ -207,6 +212,7 @@ func TestInvalidJobManagerSpec(t *testing.T) {
 					Blob:  &blobPort,
 					Query: &queryPort,
 					UI:    &uiPort,
+					HA:    &haPort,
 				},
 			},
 		},
@@ -223,6 +229,7 @@ func TestInvalidTaskManagerSpec(t *testing.T) {
 	var queryPort int32 = 8003
 	var uiPort int32 = 8004
 	var dataPort int32 = 8005
+	var haPort int32 = 8006
 	var memoryOffHeapRatio int32 = 25
 	var memoryOffHeapMin = resource.MustParse("600M")
 
@@ -244,6 +251,7 @@ func TestInvalidTaskManagerSpec(t *testing.T) {
 					Blob:  &blobPort,
 					Query: &queryPort,
 					UI:    &uiPort,
+					HA:    &haPort,
 				},
 				MemoryOffHeapRatio: &memoryOffHeapRatio,
 				MemoryOffHeapMin:   memoryOffHeapMin,
@@ -282,6 +290,7 @@ func TestInvalidTaskManagerSpec(t *testing.T) {
 					Blob:  &blobPort,
 					Query: &queryPort,
 					UI:    &uiPort,
+					HA:    &haPort,
 				},
 				MemoryOffHeapRatio: &memoryOffHeapRatio,
 				MemoryOffHeapMin:   memoryOffHeapMin,
@@ -320,6 +329,7 @@ func TestInvalidTaskManagerSpec(t *testing.T) {
 					Blob:  &blobPort,
 					Query: &queryPort,
 					UI:    &uiPort,
+					HA:    &haPort,
 				},
 				MemoryOffHeapRatio: &memoryOffHeapRatio,
 				MemoryOffHeapMin:   memoryOffHeapMin,
@@ -353,6 +363,7 @@ func TestInvalidJobSpec(t *testing.T) {
 	var queryPort int32 = 8003
 	var uiPort int32 = 8004
 	var dataPort int32 = 8005
+	var haPort int32 = 8006
 	var restartPolicy = JobRestartPolicyFromSavepointOnFailure
 	var invalidRestartPolicy JobRestartPolicy = "XXX"
 	var validator = &Validator{}
@@ -378,6 +389,7 @@ func TestInvalidJobSpec(t *testing.T) {
 					Blob:  &blobPort,
 					Query: &queryPort,
 					UI:    &uiPort,
+					HA:    &haPort,
 				},
 				MemoryOffHeapRatio: &memoryOffHeapRatio,
 				MemoryOffHeapMin:   memoryOffHeapMin,
@@ -420,6 +432,7 @@ func TestInvalidJobSpec(t *testing.T) {
 					Blob:  &blobPort,
 					Query: &queryPort,
 					UI:    &uiPort,
+					HA:    &haPort,
 				},
 				MemoryOffHeapRatio: &memoryOffHeapRatio,
 				MemoryOffHeapMin:   memoryOffHeapMin,
@@ -462,6 +475,7 @@ func TestInvalidJobSpec(t *testing.T) {
 					Blob:  &blobPort,
 					Query: &queryPort,
 					UI:    &uiPort,
+					HA:    &haPort,
 				},
 				MemoryOffHeapRatio: &memoryOffHeapRatio,
 				MemoryOffHeapMin:   memoryOffHeapMin,
@@ -505,6 +519,7 @@ func TestInvalidJobSpec(t *testing.T) {
 					Blob:  &blobPort,
 					Query: &queryPort,
 					UI:    &uiPort,
+					HA:    &haPort,
 				},
 				MemoryOffHeapRatio: &memoryOffHeapRatio,
 				MemoryOffHeapMin:   memoryOffHeapMin,
@@ -700,6 +715,7 @@ func TestUpdateCluster(t *testing.T) {
 	var queryPort int32 = 8003
 	var uiPort int32 = 8004
 	var dataPort int32 = 8005
+	var haPort int32 = 8006
 	var memoryOffHeapRatio int32 = 25
 	var memoryOffHeapMin = resource.MustParse("600M")
 
@@ -725,6 +741,7 @@ func TestUpdateCluster(t *testing.T) {
 			Blob:  &blobPort,
 			Query: &queryPort,
 			UI:    &uiPort,
+			HA:    &haPort,
 		},
 		MemoryOffHeapRatio: &memoryOffHeapRatio,
 		MemoryOffHeapMin:   memoryOffHeapMin,
@@ -739,6 +756,7 @@ func TestUpdateCluster(t *testing.T) {
 			Blob:  &blobPort,
 			Query: &queryPort,
 			UI:    &uiPort,
+			HA:    &haPort,
 		},
 		MemoryOffHeapRatio: &newMemoryOffHeapRatio,
 		MemoryOffHeapMin:   memoryOffHeapMin,
@@ -918,11 +936,13 @@ func TestDupPort(t *testing.T) {
 	var blobPort int32 = 8002
 	var queryPort int32 = 8003
 	var uiPort int32 = 8004
+	var haPort int32 = 8006
 	var flinkPorts = JobManagerPorts{
 		RPC:   &rpcPort,
 		Blob:  &blobPort,
 		Query: &queryPort,
 		UI:    &uiPort,
+		HA:    &haPort,
 	}
 	var jm = JobManagerSpec{Replicas: &jmReplicas, AccessScope: AccessScopeVPC, Ports: flinkPorts,
 		ExtraPorts: []NamedPort{
@@ -962,6 +982,7 @@ func getSimpleFlinkCluster() FlinkCluster {
 	var queryPort int32 = 8003
 	var uiPort int32 = 8004
 	var dataPort int32 = 8005
+	var haPort int32 = 8006
 	var memoryOffHeapRatio int32 = 25
 	var memoryOffHeapMin = resource.MustParse("600M")
 	var parallelism int32 = 2
@@ -985,6 +1006,7 @@ func getSimpleFlinkCluster() FlinkCluster {
 					Blob:  &blobPort,
 					Query: &queryPort,
 					UI:    &uiPort,
+					HA:    &haPort,
 				},
 				MemoryOffHeapRatio: &memoryOffHeapRatio,
 				MemoryOffHeapMin:   memoryOffHeapMin,

@@ -147,6 +147,10 @@ type JobManagerPorts struct {
 
 	// UI port, default: 8081.
 	UI *int32 `json:"ui,omitempty"`
+
+	//HA port, default: 6126
+	HA *int32 `json:"ha,omitempty"`
+
 }
 
 // JobManagerIngressSpec defines ingress of JobManager

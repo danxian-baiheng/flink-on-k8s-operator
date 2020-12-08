@@ -66,6 +66,10 @@ func _SetJobManagerDefault(jmSpec *JobManagerSpec) {
 		jmSpec.Ports.UI = new(int32)
 		*jmSpec.Ports.UI = 8081
 	}
+	if jmSpec.Ports.HA == nil {
+		jmSpec.Ports.HA = new(int32)
+		*jmSpec.Ports.HA = 6126
+	}
 	if jmSpec.MemoryOffHeapMin.Format == "" {
 		jmSpec.MemoryOffHeapMin = *resource.NewScaledQuantity(600, 6) // 600MB
 	}
