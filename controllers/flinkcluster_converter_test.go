@@ -42,6 +42,7 @@ func TestGetDesiredClusterState(t *testing.T) {
 	var jmBlobPort int32 = 6124
 	var jmQueryPort int32 = 6125
 	var jmUIPort int32 = 8081
+	var jmHAPort int32 = 6126
 	var useTLS bool = true
 	var tmDataPort int32 = 6121
 	var tmRPCPort int32 = 6122
@@ -192,6 +193,7 @@ func TestGetDesiredClusterState(t *testing.T) {
 					Blob:  &jmBlobPort,
 					Query: &jmQueryPort,
 					UI:    &jmUIPort,
+					HA:    &jmHAPort,
 				},
 				Resources: corev1.ResourceRequirements{
 					Requests: map[corev1.ResourceName]resource.Quantity{
@@ -333,6 +335,7 @@ func TestGetDesiredClusterState(t *testing.T) {
 								{Name: "blob", ContainerPort: jmBlobPort},
 								{Name: "query", ContainerPort: jmQueryPort},
 								{Name: "ui", ContainerPort: jmUIPort},
+								{Name: "ha", ContainerPort: jmHAPort},
 							},
 							LivenessProbe:  &jmLivenessProbe,
 							ReadinessProbe: &jmReadinessProbe,
@@ -488,6 +491,7 @@ func TestGetDesiredClusterState(t *testing.T) {
 				{Name: "blob", Port: 6124, TargetPort: intstr.FromString("blob")},
 				{Name: "query", Port: 6125, TargetPort: intstr.FromString("query")},
 				{Name: "ui", Port: 8081, TargetPort: intstr.FromString("ui")},
+				{Name: "ha", Port: 6126, TargetPort: intstr.FromString("ha")},
 			},
 		},
 	}
@@ -890,6 +894,7 @@ func TestGetDesiredClusterState(t *testing.T) {
 
 	// ConfigMap
 	var flinkConfYaml = `blob.server.port: 6124
+high-availability.jobmanager.port: 6126
 jobmanager.rpc.address: flinkjobcluster-sample-jobmanager
 jobmanager.rpc.port: 6123
 query.server.port: 6125
@@ -937,6 +942,7 @@ func TestSecurityContext(t *testing.T) {
 	var jmBlobPort int32 = 6124
 	var jmQueryPort int32 = 6125
 	var jmUIPort int32 = 8081
+	var jmHAPort int32 = 6126
 	var tmDataPort int32 = 6121
 	var tmRPCPort int32 = 6122
 	var tmQueryPort int32 = 6125
@@ -964,6 +970,7 @@ func TestSecurityContext(t *testing.T) {
 					Blob:  &jmBlobPort,
 					Query: &jmQueryPort,
 					UI:    &jmUIPort,
+					HA:    &jmHAPort,
 				},
 				SecurityContext: &securityContext,
 			},
@@ -1002,6 +1009,7 @@ func TestSecurityContext(t *testing.T) {
 					Blob:  &jmBlobPort,
 					Query: &jmQueryPort,
 					UI:    &jmUIPort,
+					HA:    &jmHAPort,
 				},
 			},
 			TaskManager: v1beta1.TaskManagerSpec{
